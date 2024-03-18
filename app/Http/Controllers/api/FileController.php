@@ -9,47 +9,47 @@ use App\Http\Requests\File\FileUpdateRequest;
 use App\Http\Resources\File\FileResource;
 use App\Http\Resources\File\FileResourceCollection;
 use App\Models\File;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class FileController extends Controller
 {
     // Display a listing of the resource.
-    public function index()
+    public function index(Request $request)
     {
-        return FileResourceCollection::make((File::get()));
+        $files = File::where([
+            ['user_id', $request->user_id],
+            ['order_id', $request->order_id],
+        ])->get();
+
+        return FileResourceCollection::make($files);
     }
 
     // Store a newly created resource in storage.
     public function store(FileStoreRequest $request)
     {
         $validatedData = $request->validated();
+        if ($request->hasFile('files')) {
+            foreach ($request->file('files') as $file) {
+                FileUploadHelper::uploadFile($file, $validatedData['file_type'], $validatedData['user_id']);
 
-        switch ($validatedData['file_type']) {
-            case 'invoice':
-                FileUploadHelper::uploadFile($request->file('file'), 'invoices', $validatedData['user_id']);
-                break;
-            case 'customer':
-                FileUploadHelper::uploadFile($request->file('file'), 'customer', $validatedData['user_id']);
-                break;
-            case 'artwork':
-                FileUploadHelper::uploadFile($request->file('file'), 'artwork', $validatedData['user_id']);
-                break;
-            default:
-                break;
+                $data = File::create([
+                    'user_id' => $validatedData['user_id'],
+                    'order_id' => $validatedData['order_id'],
+                    'file_type' => $validatedData['file_type'],
+                    'file_path' => FileUploadHelper::getFilePath(),
+                ]);
+                $data->save();
+            }
+            return response()->json([
+                'success' => true,
+                'message' => $validatedData['file_type'] . ' files uploaded successfully',
+            ], Response::HTTP_CREATED);
         }
-
-        $file = File::create([
-            'file_type' => $validatedData['file_type'],
-            'user_id' => $validatedData['user_id'],
-            'order_id' => $validatedData['order_id'],
-            'file_path' => FileUploadHelper::getFilePath(),
-        ]);
-
         return response()->json([
-            'success' => true,
-            'message' => 'File uploaded successfully',
-            'data' => FileResource::make($file)
-        ], Response::HTTP_CREATED);
+            'success' => false,
+            'message' => 'No file uploaded',
+        ], Response::HTTP_BAD_REQUEST);
     }
 
     // Display the specified resource.

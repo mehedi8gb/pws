@@ -12,11 +12,11 @@ class FileResource extends JsonResource
     {
         $id = $this->id;
         return [
-            'file' => $this->file_path,
+            'file_path' => url('storage/'.$this->file_path),
             'created_at' => Carbon::parse($this->created_at)->format('d-m-Y'),
-            'links' => [
+//            'links' => [
 //                'delete' => route('file.destroy', $id),
-            ]
+//            ]
         ];
     }
 }

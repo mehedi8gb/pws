@@ -19,7 +19,7 @@ class FileStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'file' => 'required|file|max:10240', // Assuming 10MB file size limit (can be adjusted)
+            'files' => 'required|max:10240', // Assuming 10MB file size limit (can be adjusted)
             'user_id' => 'required',
             'order_id' => 'required',
             'file_type' => 'required|in:invoice,customer,artwork', // Define allowed file types
@@ -29,7 +29,7 @@ class FileStoreRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'file.required' => 'The file field is required.',
+            'files.required' => 'The files field is required.',
             // Define custom validation error messages here
         ];
     }
