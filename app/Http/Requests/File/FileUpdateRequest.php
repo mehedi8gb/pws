@@ -14,23 +14,22 @@ class FileUpdateRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         // You can perform data manipulation here
-        $this->merge([
-            'title' => ucwords(strtolower($this->input('title'))), // Convert name to title case
-            // Add more data manipulation as needed
-        ]);
     }
 
     public function rules(): array
     {
         return [
-            'title' => 'nullable|string|max:255',
-            'slug' => 'nullable',
+            'file' => 'required|file|max:10240', // Assuming 10MB file size limit (can be adjusted)
+            'user_id' => 'required',
+            'order_id' => 'required',
+            'file_type' => 'required|in:invoice,customer,artwork', // Define allowed file types
         ];
     }
 
     public function messages(): array
     {
         return [
+            'file.required' => 'The file field is required.',
             // Define custom validation error messages here
         ];
     }
@@ -38,18 +37,14 @@ class FileUpdateRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'title' => 'product title',
-            // Define custom attribute names for validation error messages here
+            //'title' => 'Post title',
         ];
     }
 
     protected function passedValidation(): void
     {
-        // You can further manipulate the validated data after it has been inserted into the database
-        // For example, you can hash the password before storing it in the database
         $this->replace([
             //
         ]);
     }
 }
-        

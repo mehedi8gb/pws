@@ -53,9 +53,9 @@ class FileController extends Controller
     }
 
     // Display the specified resource.
-    public function show($slug)
+    public function show($fileId)
     {
-        $file = File::where('slug', $slug)->firstOrFail();
+        $file = File::find($fileId);
         return FileResource::make($file);
     }
 

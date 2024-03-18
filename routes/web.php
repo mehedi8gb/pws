@@ -6,5 +6,5 @@ use Illuminate\Support\Facades\Cache;
 
 
 Route::get('/', function () {
-    return abort(404, 'Page Not Found');
+    abort(404, 'Page Not Found');
 });
