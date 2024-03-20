@@ -17,10 +17,7 @@ class FileController extends Controller
     // Display a listing of the resource.
     public function index(Request $request)
     {
-        $files = File::where([
-            ['user_id', $request->user_id],
-            ['order_id', $request->order_id],
-        ])->get();
+        $files = File::where('order_id', $request->order_id)->get();
 
         return FileResourceCollection::make($files);
     }
@@ -36,8 +33,9 @@ class FileController extends Controller
                 $data = File::create([
                     'user_id' => $validatedData['user_id'],
                     'order_id' => $validatedData['order_id'],
-                    'file_type' => $validatedData['file_type'],
+                    'file_name' => FileUploadHelper::getFileName(),
                     'file_path' => FileUploadHelper::getFilePath(),
+                    'file_type' => $validatedData['file_type'],
                 ]);
                 $data->save();
             }
@@ -70,6 +68,7 @@ class FileController extends Controller
     public function destroy(File $file)
     {
         $file->delete();
+        FileUploadHelper::deleteFile($file->file_path);
 
         return response()->json([
             'success' => true,

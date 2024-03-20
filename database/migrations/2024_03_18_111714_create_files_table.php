@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string('user_id');
             $table->string('order_id');
+            $table->binary('file_name');
             $table->binary('file_path');
             $table->string('file_type');
             $table->softDeletes();

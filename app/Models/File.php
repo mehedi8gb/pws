@@ -7,12 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Cviebrock\EloquentSluggable\Sluggable;
 
+/**
+ * @method static where(string $string, mixed $order_id)
+ */
 class File extends Model
 {
 use SoftDeletes, HasFactory;
 
     protected $fillable = [
-        'files',
+        'file_name',
         'file_path',
         'file_type',
         'user_id',
@@ -25,6 +28,7 @@ use SoftDeletes, HasFactory;
     ];
 
     protected $casts = [
-//        'file_path' => 'encrypted',
+        'file_name' => 'encrypted',
+        'file_path' => 'encrypted',
     ];
 }

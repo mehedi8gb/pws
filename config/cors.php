@@ -15,15 +15,15 @@ return [
     |
     */
 
-    'paths' => ['api/*', 'sanctum/csrf-cookie'],
+    'paths' => ['api/*'],
 
-    'allowed_methods' => ['*'],
+    'allowed_methods' => ['GET', 'POST'],
 
-    'allowed_origins' => ['*'],
+    'allowed_origins' => ['https://new-backoffice.test', 'https://staging.backoffice2.daynightprint.co.uk', 'https://backoffice2.daynightprint.co.uk'],
 
     'allowed_origins_patterns' => [],
 
-    'allowed_headers' => ['*'],
+    'allowed_headers' => ['Content-Type', 'Authorization'],
 
     'exposed_headers' => [],
 
