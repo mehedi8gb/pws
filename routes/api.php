@@ -19,9 +19,7 @@ use Illuminate\Support\Facades\Route;
 //    return $request->user();
 //});
 
-Route::middleware('guest')->group(function () {
-            Route::get('/', [FileController::class, 'index'])->name('file.index');
-            Route::get('file/{fileId}', [FileController::class, 'show'])->name('file.show');
-            Route::post('files/upload', [FileController::class, 'store'])->name('file.store');
-            Route::delete('file/destroy/{fileId}', [FileController::class, 'destroy'])->name('file.destroy');
-        });
+Route::get('/', [FileController::class, 'index'])->name('file.index');
+Route::get('file/{fileId}', [FileController::class, 'show'])->name('file.show');
+Route::post('files/upload', [FileController::class, 'store'])->name('file.store');
+Route::delete('file/destroy/{fileId}', [FileController::class, 'destroy'])->name('file.destroy');
