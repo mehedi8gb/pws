@@ -1,0 +1,43 @@
+services:
+  backend:
+    build:
+      context: ./bin/docker/php
+    volumes:
+      - .:/app
+    ports:
+      - "9003:9003" #xdebug port
+    working_dir: /app
+    image: laravel/app
+    restart: always
+
+
+  mariadb:
+    image: mariadb:10.5.7
+    depends_on:
+      - backend
+    ports:
+      - "3308:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=app
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=app
+      - MYSQL_DATABASE=pws_db
+    restart: always
+
+  nginx:
+    build:
+      context: ./bin/docker/nginx
+    ports:
+      - "8090:80"
+    depends_on:
+      - backend
+    volumes:
+      - .:/app
+    restart: always
+    
+    
+networks:
+  default:
+    name: pws-network
+    
+
