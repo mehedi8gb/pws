@@ -1,5 +1,5 @@
 #!/bin/bash
-# composer install
+composer install
 php artisan optimize:clear
 php artisan optimize
 php artisan migrate --seed --force

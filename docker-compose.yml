@@ -8,7 +8,7 @@ services:
       - "9003:9003" #xdebug port
     working_dir: /app
     image: laravel/app
-    restart: unless-stopped
+    restart: always
 
 
   mariadb:
@@ -22,7 +22,7 @@ services:
       - MYSQL_USER=root
       - MYSQL_PASSWORD=app
       - MYSQL_DATABASE=pws_db
-    restart: unless-stopped
+    restart: always
 
   nginx:
     build:
@@ -33,11 +33,11 @@ services:
       - backend
     volumes:
       - .:/app
-    restart: unless-stopped
+    restart: always
     
     
 networks:
   default:
-    name: backend-network
+    name: pws-network
     
 

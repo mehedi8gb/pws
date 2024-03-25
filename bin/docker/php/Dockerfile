@@ -17,20 +17,11 @@ RUN docker-php-ext-install sockets
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 ### End Init install
 
-
-# Install Redis
-RUN pecl install redis
-RUN docker-php-ext-enable redis
-
-# Install Mongodb
-RUN pecl install mongodb
-RUN docker-php-ext-enable mongodb
-
-RUN docker-php-ext-install mysqli pdo pdo_mysql && docker-php-ext-enable pdo_mysql
+RUN docker-php-ext-install mysqli pdo pdo_mysql  exif && docker-php-ext-enable pdo_mysql exif
 
 #install xdebug
 RUN pecl install xdebug
 
-COPY 90-xdebug.ini "${PHP_INI_DIR}"/conf.d
+# COPY 90-xdebug.ini "${PHP_INI_DIR}"/conf.d
 # Copy custom fpm.conf file
 # COPY fpm.conf /usr/local/etc/php-fpm.d/php-fpm.conf
