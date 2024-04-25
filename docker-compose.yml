@@ -5,7 +5,7 @@ services:
     volumes:
       - .:/app
     ports:
-      - "9003:9003" #xdebug port
+      - "9003:9000" #fastcgi
     working_dir: /app
     image: laravel/app
     restart: always
@@ -34,10 +34,10 @@ services:
     volumes:
       - .:/app
     restart: always
-    
-    
+
+
 networks:
   default:
     name: pws-network
-    
+
 

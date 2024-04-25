@@ -1,5 +1,7 @@
 #!/bin/bash
 composer install
+php artisan config:clear
+php artisan migrate --seed --force
 php artisan optimize:clear
 php artisan optimize
-php artisan migrate --seed --force
+chown -R www-data:www-data /app
