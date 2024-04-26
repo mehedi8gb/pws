@@ -27,7 +27,6 @@ jobs:
             chmod 0700 ssh.key
             rsync \
             -rlpvz \
-            --dry-run \
             --exclude=.* \
             --exclude=/tests \
             --exclude=/storage \
