@@ -23,16 +23,20 @@ jobs:
           name: Deploy over SSH
           command: |
             sudo apt install rsync
+            echo $DEPLOY_SSH_KEY | base64 -d > ssh.key
+            chmod 0700 ssh.key
             rsync \
             -rlpvz \
+            --dry-run \
             --exclude=.* \
             --exclude=/tests \
             --exclude=/storage \
             --exclude=/bootstrap/cache \
-            -e 'ssh -p << parameters.ssh_port >>' \
+            -e 'ssh -i ssh.key -p << parameters.ssh_port >>' \
             $CIRCLE_WORKING_DIRECTORY/ \
             $DEPLOY_SSH_USER@$DEPLOY_SSH_HOST:<< parameters.dest_dir >>
-            ssh -p << parameters.ssh_port >> $DEPLOY_SSH_USER@$DEPLOY_SSH_HOST "cd << parameters.dest_dir >>;<< parameters.post_script >>";
+            ssh -i ssh.key -p << parameters.ssh_port >> $DEPLOY_SSH_USER@$DEPLOY_SSH_HOST "cd << parameters.dest_dir >>;<< parameters.post_script >>"
+            rm ssh.key
       - slack/notify:
           custom: |
             {
