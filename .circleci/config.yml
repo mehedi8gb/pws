@@ -23,19 +23,19 @@ jobs:
           name: Deploy over SSH
           command: |
             sudo apt install rsync
-            echo $DEPLOY_SSH_KEY | base64 -d > ssh.key
-            chmod 0700 ssh.key
+            echo $DEPLOY_SSH_KEY | base64 -d > /tmp/ssh.key
+            chmod 0700 /tmp/ssh.key
             rsync \
             -rlpvz \
             --exclude=.* \
             --exclude=/tests \
             --exclude=/storage \
             --exclude=/bootstrap/cache \
-            -e 'ssh -i ssh.key -p << parameters.ssh_port >>' \
+            -e 'ssh -i /tmp/ssh.key -p << parameters.ssh_port >>' \
             $CIRCLE_WORKING_DIRECTORY/ \
             $DEPLOY_SSH_USER@$DEPLOY_SSH_HOST:<< parameters.dest_dir >>
-            ssh -i ssh.key -p << parameters.ssh_port >> $DEPLOY_SSH_USER@$DEPLOY_SSH_HOST "cd << parameters.dest_dir >>;<< parameters.post_script >>"
-            rm ssh.key
+            ssh -i /tmp/ssh.key -p << parameters.ssh_port >> $DEPLOY_SSH_USER@$DEPLOY_SSH_HOST "cd << parameters.dest_dir >>;<< parameters.post_script >>"
+            rm /tmp/ssh.key
       - slack/notify:
           custom: |
             {
@@ -65,10 +65,10 @@ workflows:
       - deploy_rsync:
           name: deploy_production
           ssh_port: 18765
-          dest_dir: "/home/customer/www/file-ws.daynightprint.co.uk"
-          post_script: "./bin/update_dev.sh"
+          dest_dir: "/home/customer/www/file-ws.247printing.co.uk"
+          post_script: "./bin/update_prod.sh"
           environment: "PRODUCTION"
-          environment_url: "https://file-ws.daynightprint.co.uk"
+          environment_url: "https://file-ws.247printing.co.uk"
           requires:
             - deploy_production_approval
           context:
