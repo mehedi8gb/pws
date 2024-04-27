@@ -22,4 +22,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('files', [FileController::class, 'index'])->name('file.index');
 Route::get('file/{fileId}', [FileController::class, 'show'])->name('file.show');
 Route::post('files/upload', [FileController::class, 'store'])->name('file.store');
+Route::get('download/{file}', [FileController::class, 'download'])->name('file.download');
 Route::post('file/destroy/{file}', [FileController::class, 'destroy'])->name('file.destroy');
