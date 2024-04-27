@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -14,12 +13,10 @@ return new class extends Migration
         Schema::create('files', function (Blueprint $table) {
             $table->id();
             $table->string('user_id');
-            $table->string('order_id')->nullable();
-            $table->string('access_token')->default('YOUR_SECRET_ACCESS_TOKEN');
+            $table->string('order_id');
             $table->binary('file_name');
             $table->binary('file_path');
             $table->string('file_type');
-            $table->string('file_url');
             $table->softDeletes();
             $table->timestamps();
         });
