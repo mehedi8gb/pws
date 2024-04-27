@@ -1,0 +1,76 @@
+version: 2.1
+orbs:
+  slack: circleci/slack@4.10.1
+jobs:
+  deploy_rsync:
+    parameters:
+      ssh_port:
+        type: integer
+        default: 22
+      dest_dir:
+        type: string
+      post_script:
+        type: string
+      environment:
+        type: string
+      environment_url:
+        type: string
+    machine:
+      enabled: true
+    steps:
+      - checkout
+      - run:
+          name: Deploy over SSH
+          command: |
+            sudo apt install rsync
+            echo $DEPLOY_SSH_KEY | base64 -d > /tmp/ssh.key
+            chmod 0700 /tmp/ssh.key
+            rsync \
+            -rlpvz \
+            --exclude=.* \
+            --exclude=/tests \
+            --exclude=/storage \
+            --exclude=/bootstrap/cache \
+            -e 'ssh -i /tmp/ssh.key -p << parameters.ssh_port >>' \
+            $CIRCLE_WORKING_DIRECTORY/ \
+            $DEPLOY_SSH_USER@$DEPLOY_SSH_HOST:<< parameters.dest_dir >>
+            ssh -i /tmp/ssh.key -p << parameters.ssh_port >> $DEPLOY_SSH_USER@$DEPLOY_SSH_HOST "cd << parameters.dest_dir >>;<< parameters.post_script >>"
+            rm /tmp/ssh.key
+      - slack/notify:
+          custom: |
+            {
+              "text": ":tada: $CIRCLE_USERNAME deployed $CIRCLE_PROJECT_REPONAME(*<< parameters.environment >>*) $CIRCLE_BRANCH branch to \n<< parameters.environment_url >>"
+            }
+          event: pass
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - deploy_rsync:
+          name: deploy_staging
+          dest_dir: "/home/app/file-ws"
+          post_script: "./bin/deploy_dev.sh staging"
+          environment: "staging"
+          environment_url: "https://staging.file-ws.daynightprint.co.uk"
+          context:
+            - dnp-staging
+            - dnp-general
+      - deploy_production_approval:
+          type: approval
+          requires:
+            - deploy_staging
+          filters:
+            branches:
+              only: [master]
+      - deploy_rsync:
+          name: deploy_production
+          ssh_port: 18765
+          dest_dir: "/home/customer/www/file-ws.247printing.co.uk"
+          post_script: "./bin/update_prod.sh"
+          environment: "PRODUCTION"
+          environment_url: "https://file-ws.247printing.co.uk"
+          requires:
+            - deploy_production_approval
+          context:
+            - dnp-production
+            - dnp-general
