@@ -19,10 +19,10 @@ class FileStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'files' => 'required|max:10240', // Assuming 10MB file size limit (can be adjusted)
+            'files' => 'required|max:102400', // Assuming 100MB file size limit (can be adjusted)
             'user_id' => 'required',
             'order_id' => 'required',
-            'file_type' => 'required|in:invoice,customer,artwork', // Define allowed file types
+            'file_type' => 'required|in:invoice,customer,artwork,item_file', // Define allowed file types
         ];
     }
 
