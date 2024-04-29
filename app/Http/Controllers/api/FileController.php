@@ -18,7 +18,7 @@ class FileController extends Controller
     public function index(Request $request)
     {
         $files = File::where('order_id', $request->order_id)
-            ->orWhere('file_type', $request->file_type)->get();
+            ->where('file_type', $request->file_type)->get();
 
         return FileResourceCollection::make($files);
     }
