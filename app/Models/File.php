@@ -34,6 +34,6 @@ class File extends Model
         // 'access_token' => 'encrypted',
         'file_name' => 'encrypted',
         'file_path' => 'encrypted',
-        'file_type' => 'encrypted',
+//        'file_type' => 'encrypted',
     ];
 }

@@ -17,7 +17,8 @@ class FileController extends Controller
     // Display a listing of the resource.
     public function index(Request $request)
     {
-        $files = File::where('order_id', $request->order_id)->get();
+        $files = File::where('order_id', $request->order_id)
+            ->where('file_type', $request->file_type)->get();
 
         return FileResourceCollection::make($files);
     }
