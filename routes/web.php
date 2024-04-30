@@ -9,3 +9,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+//   temporary route for testing
+   Route::get('/phpinfo', function (){
+    return phpinfo();
+
+   });
+
