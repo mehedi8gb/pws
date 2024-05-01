@@ -1,3 +1,4 @@
+version: "3"
 services:
   backend:
     build:
@@ -5,18 +6,17 @@ services:
     volumes:
       - .:/app
     ports:
-      - "9003:9003" #xdebug port
+      - "127.0.0.1:9003:9000" #fastcgi
     working_dir: /app
     image: laravel/app
     restart: always
-
+    depends_on:
+      - mariadb
 
   mariadb:
     image: mariadb:10.5.7
-    depends_on:
-      - backend
     ports:
-      - "3308:3306"
+      - "127.0.0.1:3308:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=app
       - MYSQL_USER=root
@@ -28,16 +28,16 @@ services:
     build:
       context: ./bin/docker/nginx
     ports:
-      - "8090:80"
+      - "127.0.0.1:8090:80"
     depends_on:
       - backend
     volumes:
       - .:/app
     restart: always
-    
-    
+
+
 networks:
   default:
     name: pws-network
-    
+
 

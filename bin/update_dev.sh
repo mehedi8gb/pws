@@ -1,5 +1,10 @@
 #!/bin/bash
 composer install
+php artisan config:clear
+until php artisan migrate --seed --force
+do
+  echo "Migration failed. Trying again..."
+done
 php artisan optimize:clear
 php artisan optimize
-php artisan migrate --seed --force
+chown -R www-data:www-data /app

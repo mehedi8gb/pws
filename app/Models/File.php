@@ -12,14 +12,15 @@ use Cviebrock\EloquentSluggable\Sluggable;
  */
 class File extends Model
 {
-use SoftDeletes, HasFactory;
+    use SoftDeletes, HasFactory;
 
     protected $fillable = [
+        'user_id',
+        'order_id',
+        'access_token',
         'file_name',
         'file_path',
         'file_type',
-        'user_id',
-        'order_id',
     ];
 
     protected array $dates = [
@@ -28,7 +29,11 @@ use SoftDeletes, HasFactory;
     ];
 
     protected $casts = [
+        // 'user_id' => 'encrypted',
+        // 'order_id' => 'encrypted',
+        // 'access_token' => 'encrypted',
         'file_name' => 'encrypted',
         'file_path' => 'encrypted',
+//        'file_type' => 'encrypted',
     ];
 }

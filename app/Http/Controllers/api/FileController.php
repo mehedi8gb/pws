@@ -17,7 +17,8 @@ class FileController extends Controller
     // Display a listing of the resource.
     public function index(Request $request)
     {
-        $files = File::where('order_id', $request->order_id)->get();
+        $files = File::where('order_id', $request->order_id)
+            ->where('file_type', $request->file_type)->get();
 
         return FileResourceCollection::make($files);
     }
@@ -64,6 +65,22 @@ class FileController extends Controller
         return FileResource::make($file);
     }
 
+    // Download the specified resource.
+    public function download(File $file, Request $request)
+    {
+        // $accessToken = $request->header('Authorization');
+
+        // if (!$this->isValidAccessToken($accessToken)) {
+        //     abort(401, 'Unauthorized');
+        // }
+        $filePath = storage_path('app/public/' . $file->file_path);
+        if (file_exists($filePath)) {
+            return response()->download($filePath);
+        }
+
+        abort(404);
+    }
+
     // Remove the specified resource from storage.
     public function destroy(File $file)
     {
@@ -74,5 +91,13 @@ class FileController extends Controller
             'success' => true,
             'message' => 'File deleted successfully'
         ], Response::HTTP_NO_CONTENT);
+    }
+
+    // Validate the access token
+    private function isValidAccessToken($accessToken)
+    {
+        // Implement your logic to validate the access token
+        // For example, check against your database or another source
+        return $accessToken === 'YOUR_SECRET_ACCESS_TOKEN';
     }
 }
