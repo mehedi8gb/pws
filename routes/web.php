@@ -10,8 +10,12 @@ Route::get('/', function () {
 });
 
 //   temporary route for testing
-   Route::get('/phpinfo', function (){
+Route::get('/phpinfo', function (){
     return phpinfo();
 
-   });
+});
 
+// sentry test route
+Route::get('/debug-sentry', function () {
+    throw new Exception('My first Sentry error!');
+});
