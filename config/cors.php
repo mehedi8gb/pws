@@ -17,9 +17,14 @@ return [
 
     'paths' => ['api/*'],
 
-    'allowed_methods' => ['GET', 'POST'],
+    'allowed_methods' => ['GET', 'POST', 'PUT'],
 
-    'allowed_origins' => ['https://jumpintojob-backend.test', 'https://jumpintojob.com', 'https://api.dev.jumpintojob.com', 'http://new-backoffice.test'],
+    'allowed_origins' => [
+        'https://jumpintojob-backend.test',
+        'https://jumpintojob.com',
+        'https://api.dev.jumpintojob.com',
+        'http://new-backoffice.test'
+    ],
 
     'allowed_origins_patterns' => [],
 
