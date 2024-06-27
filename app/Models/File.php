@@ -21,6 +21,7 @@ class File extends Model
         'file_name',
         'file_path',
         'file_type',
+        'file_url'
     ];
 
     protected array $dates = [

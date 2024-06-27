@@ -22,7 +22,7 @@ class FileUpdateRequest extends FormRequest
             'files' => 'required|file|max:10240', // Assuming 10MB file size limit (can be adjusted)
             'user_id' => 'required',
             'order_id' => 'required',
-            'file_type' => 'required|in:invoice,customer,artwork', // Define allowed file types
+            'file_type' => 'required|in:avatar,artwork', // Define allowed file types
         ];
     }
 

@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['GET', 'POST'],
 
-    'allowed_origins' => ['https://new-backoffice.test', 'https://staging.backoffice2.daynightprint.co.uk', 'https://backoffice2.daynightprint.co.uk'],
+    'allowed_origins' => ['https://jumpintojob-backend.test', 'https://jumpintojob.com', 'https://api.dev.jumpintojob.com', 'http://new-backoffice.test'],
 
     'allowed_origins_patterns' => [],
 

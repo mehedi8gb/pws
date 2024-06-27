@@ -14,11 +14,12 @@ return new class extends Migration
         Schema::create('files', function (Blueprint $table) {
             $table->id();
             $table->string('user_id');
-            $table->string('order_id');
+            $table->string('order_id')->nullable();
             $table->string('access_token')->default('YOUR_SECRET_ACCESS_TOKEN');
             $table->binary('file_name');
             $table->binary('file_path');
             $table->string('file_type');
+            $table->string('file_url');
             $table->softDeletes();
             $table->timestamps();
         });

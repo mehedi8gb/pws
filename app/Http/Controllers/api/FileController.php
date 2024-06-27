@@ -24,30 +24,36 @@ class FileController extends Controller
     }
 
     // Store a newly created resource in storage.
-    public function store(FileStoreRequest $request)
+    public function store(FileStoreRequest $request): \Illuminate\Http\JsonResponse
     {
         $validatedData = $request->validated();
+        $data = null;
         if ($request->hasFile('files')) {
             foreach ($request->file('files') as $file) {
                 FileUploadHelper::uploadFile($file, $validatedData['file_type'], $validatedData['user_id']);
 
                 $data = File::create([
                     'user_id' => $validatedData['user_id'],
-                    'order_id' => $validatedData['order_id'],
+//                    'order_id' => $validatedData['order_id'],
                     'file_name' => FileUploadHelper::getFileName(),
                     'file_path' => FileUploadHelper::getFilePath(),
                     'file_type' => $validatedData['file_type'],
+                    'file_url' => url('storage/' . FileUploadHelper::getFilePath())
                 ]);
+
                 $data->save();
             }
             return response()->json([
                 'success' => true,
                 'message' => $validatedData['file_type'] . ' files uploaded successfully',
+                'data' => $data
             ], Response::HTTP_CREATED);
         }
+
         return response()->json([
             'success' => false,
             'message' => 'No file uploaded',
+            'data' => ''
         ], Response::HTTP_BAD_REQUEST);
     }
 

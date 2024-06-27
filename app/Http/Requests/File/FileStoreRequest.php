@@ -21,8 +21,7 @@ class FileStoreRequest extends FormRequest
         return [
             'files' => 'required|max:102400', // Assuming 100MB file size limit (can be adjusted)
             'user_id' => 'required',
-            'order_id' => 'required',
-            'file_type' => 'required|in:invoice,customer,artwork,item_file', // Define allowed file types
+            'file_type' => 'required|in:avatar,cv_cover_image', // Define allowed file types
         ];
     }
 
