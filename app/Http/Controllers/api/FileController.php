@@ -19,6 +19,11 @@ class FileController extends Controller
     // Display a listing of the resource.
     public function index(Request $request): FileResourceCollection
     {
+        $request->validate([
+            'order_id' => 'required',
+            'file_type' => 'required',
+        ]);
+
         $files = File::where('order_id', $request->order_id)
             ->where('file_type', $request->file_type)->get();
 
