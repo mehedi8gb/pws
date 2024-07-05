@@ -9,13 +9,15 @@ use App\Http\Requests\File\FileUpdateRequest;
 use App\Http\Resources\File\FileResource;
 use App\Http\Resources\File\FileResourceCollection;
 use App\Models\File;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class FileController extends Controller
 {
     // Display a listing of the resource.
-    public function index(Request $request)
+    public function index(Request $request): FileResourceCollection
     {
         $files = File::where('order_id', $request->order_id)
             ->where('file_type', $request->file_type)->get();
@@ -24,36 +26,57 @@ class FileController extends Controller
     }
 
     // Store a newly created resource in storage.
-    public function store(FileStoreRequest $request): \Illuminate\Http\JsonResponse
+
+    /**
+     * @throws Exception
+     */
+    public function store(FileStoreRequest $request): JsonResponse
     {
         $validatedData = $request->validated();
-        $data = null;
         if ($request->hasFile('files')) {
             foreach ($request->file('files') as $file) {
                 FileUploadHelper::uploadFile($file, $validatedData['file_type'], $validatedData['user_id']);
 
                 $data = File::create([
                     'user_id' => $validatedData['user_id'],
-//                    'order_id' => $validatedData['order_id'],
+                    'order_id' => $validatedData['order_id'],
                     'file_name' => FileUploadHelper::getFileName(),
                     'file_path' => FileUploadHelper::getFilePath(),
                     'file_type' => $validatedData['file_type'],
-                    'file_url' => url('storage/' . FileUploadHelper::getFilePath())
                 ]);
-
                 $data->save();
             }
             return response()->json([
                 'success' => true,
                 'message' => $validatedData['file_type'] . ' files uploaded successfully',
-                'data' => $data
+            ], Response::HTTP_CREATED);
+        }
+
+        // Check if the request contains base64 encoded images
+
+        if (count($validatedData['base64_files']) > 0) {
+            foreach ($validatedData['base64_files'] as $base64File) {
+                // Assuming FileUploadHelper is adjusted to support base64 files
+                FileUploadHelper::uploadFileFromBase64($base64File, $validatedData['file_type'], $validatedData['user_id']);
+
+                $data = File::create([
+                    'user_id' => $validatedData['user_id'],
+                    'order_id' => $validatedData['order_id'],
+                    'file_name' => FileUploadHelper::getFileName(),
+                    'file_path' => FileUploadHelper::getFilePath(),
+                    'file_type' => $validatedData['file_type'],
+                ]);
+                $data->save();
+            }
+            return response()->json([
+                'success' => true,
+                'message' => $validatedData['file_type'] . ' base64 files uploaded successfully',
             ], Response::HTTP_CREATED);
         }
 
         return response()->json([
             'success' => false,
             'message' => 'No file uploaded',
-            'data' => ''
         ], Response::HTTP_BAD_REQUEST);
     }
 

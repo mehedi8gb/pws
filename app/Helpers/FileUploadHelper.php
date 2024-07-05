@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use Exception;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -23,6 +24,26 @@ class FileUploadHelper
         self::$fileName = $file->getClientOriginalName();
         $filenameUUID = Str::uuid()->toString() . '.' . self::$fileName;
         self::$filePath = $file->storeAs($destination . '/' . $userId, $filenameUUID, $disk);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function uploadFileFromBase64(string $base64File, string $destination, string $userId, string $fileExtension = 'png', string $disk = 'public'): void
+    {
+        // Decode base64 file
+        $fileData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $base64File));
+
+        if ($fileData === false) {
+            throw new Exception('Base64 decode failed');
+        }
+
+        // Generate unique file name
+        self::$fileName = Str::uuid()->toString() . '.' . $fileExtension;
+        self::$filePath = $destination . '/' . $userId . '/' . self::$fileName;
+
+        // Save the file
+        Storage::disk($disk)->put(self::$filePath, $fileData);
     }
 
     public static function deleteFile(string $filePath, string $disk = 'public'): void
