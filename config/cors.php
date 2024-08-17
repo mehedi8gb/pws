@@ -17,13 +17,13 @@ return [
 
     'paths' => ['api/*'],
 
-    'allowed_methods' => ['GET', 'POST', 'PUT'],
+    'allowed_methods' => ['GET', 'POST', 'OPTIONS'],
 
     'allowed_origins' => [
-        'https://jumpintojob-backend.test',
-        'https://jumpintojob.com',
-        'https://api.dev.jumpintojob.com',
-        'http://new-backoffice.test'
+        'https://new-backoffice.test',
+        'https://staging.backoffice2.daynightprint.co.uk',
+        'https://backoffice2.daynightprint.co.uk',
+        'https://dnp-order-flow.netlify.app'
     ],
 
     'allowed_origins_patterns' => [],
