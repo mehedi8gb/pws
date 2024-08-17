@@ -17,9 +17,14 @@ return [
 
     'paths' => ['api/*'],
 
-    'allowed_methods' => ['GET', 'POST'],
+    'allowed_methods' => ['GET', 'POST', 'OPTIONS'],
 
-    'allowed_origins' => ['https://new-backoffice.test', 'https://staging.backoffice2.daynightprint.co.uk', 'https://backoffice2.daynightprint.co.uk'],
+    'allowed_origins' => [
+        'https://new-backoffice.test',
+        'https://staging.backoffice2.daynightprint.co.uk',
+        'https://backoffice2.daynightprint.co.uk',
+        'https://dnp-order-flow.netlify.app'
+    ],
 
     'allowed_origins_patterns' => [],
 
