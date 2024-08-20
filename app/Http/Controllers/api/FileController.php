@@ -12,6 +12,7 @@ use App\Models\File;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class FileController extends Controller
@@ -20,12 +21,20 @@ class FileController extends Controller
     public function index(Request $request): FileResourceCollection
     {
         $request->validate([
-            'order_id' => 'required',
+            'order_id' => 'required_without:session_id',
             'file_type' => 'required',
+            'session_id' => 'required_without:order_id'
         ]);
+        $files = [];
 
-        $files = File::where('order_id', $request->order_id)
-            ->where('file_type', $request->file_type)->get();
+        if ($request->has('order_id')) {
+            $files = File::where('order_id', $request->order_id)
+                ->where('file_type', $request->file_type)->get();
+        }
+        if ($request->has('session_id')) {
+            $files = File::where('session_id', $request->session_id)
+                ->where('file_type', $request->file_type)->get();
+        }
 
         return FileResourceCollection::make($files);
     }
@@ -85,11 +94,85 @@ class FileController extends Controller
         ], Response::HTTP_BAD_REQUEST);
     }
 
+    public function tempStore(FileStoreRequest $request): JsonResponse
+    {
+        $validatedData = $request->validated();
+        $sessionId = $validatedData['session_id'];
+
+        if ($request->hasFile('files')) {
+            foreach ($request->file('files') as $file) {
+                FileUploadHelper::uploadFile($file, $validatedData['file_type'], 'temp');
+
+                $data = File::create([
+                    'session_id' => $sessionId,
+                    'file_name' => FileUploadHelper::getFileName(),
+                    'file_path' => FileUploadHelper::getFilePath(),
+                    'file_type' => $validatedData['file_type'],
+                ]);
+                $data->save();
+            }
+            return response()->json([
+                'success' => true,
+                'message' => $validatedData['file_type'] . ' files uploaded temporarily with session ID',
+            ], Response::HTTP_CREATED);
+        }
+
+        if (count($validatedData['base64_files']) > 0) {
+            foreach ($validatedData['base64_files'] as $base64File) {
+                FileUploadHelper::uploadFileFromBase64($base64File, $validatedData['file_type'], 'temp');
+
+                $data = File::create([
+                    'session_id' => $sessionId,
+                    'file_name' => FileUploadHelper::getFileName(),
+                    'file_path' => FileUploadHelper::getFilePath(),
+                    'file_type' => $validatedData['file_type'],
+                ]);
+                $data->save();
+            }
+            return response()->json([
+                'success' => true,
+                'message' => $validatedData['file_type'] . ' base64 files uploaded temporarily with session ID',
+            ], Response::HTTP_CREATED);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'No file uploaded',
+        ], Response::HTTP_BAD_REQUEST);
+
+    }
+
     // Display the specified resource.
     public function show($fileId)
     {
         $file = File::find($fileId);
         return FileResource::make($file);
+    }
+
+    public function moveToPermanent(Request $request): JsonResponse
+    {
+        $request->validate([
+            'session_id' => 'required',
+            'order_id' => 'required',
+            'user_id' => 'required',
+            'file_type' => 'required',
+        ]);
+
+        $files = File::where('session_id', $request->session_id)->get();
+        foreach ($files as $file) {
+            $filepath = FileUploadHelper::moveFileToPermanent($file, $request->user_id);
+            $file->update([
+                'user_id' => $request->user_id,
+                'order_id' => $request->order_id,
+                'file_path' => $filepath,
+                'session_id' => null,
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Files moved to permanent storage successfully',
+        ], Response::HTTP_OK);
     }
 
     // Update the specified resource in storage.
