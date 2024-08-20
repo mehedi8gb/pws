@@ -20,11 +20,14 @@ class FileStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => 'required',
-            'order_id' => 'required',
+            'user_id' => 'required_without:session_id',
+            'order_id' => 'required_without:session_id',
+
+            'session_id' => 'nullable', // 'session_id' can be nullable and a string
+
             'file_type' => 'required|in:invoice,customer,artwork,item_file', // Define allowed file types
-            'files' => 'required_without:base64_files|array', // 'files' should be an array if provided
-            'files.*' => 'file|max:102400', // Validate each file in 'files' array
+            'files' => 'required_without:base64_files|array',
+            'files.*' => 'file|max:102400', // Maximum file size is 100MB
             'base64_files' => 'required_without:files|array', // 'base64_files' should be an array if provided
             'base64_files.*' => 'string', // Each entry in 'base64_files' should be a string
         ];
@@ -33,8 +36,8 @@ class FileStoreRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'user_id.required' => 'The user ID field is required.',
-            'order_id.required' => 'The order ID field is required.',
+            'user_id.required_without' => 'The user ID field is required when session ID is not present.',
+            'order_id.required_without' => 'The order ID field is required when session ID is not present.',
             'file_type.required' => 'The file type field is required.',
             'file_type.in' => 'The selected file type is invalid.',
             'files.required_without' => 'The files field is required when base64 files are not present.',

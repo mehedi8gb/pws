@@ -15,6 +15,7 @@ class File extends Model
     use SoftDeletes, HasFactory;
 
     protected $fillable = [
+        'session_id',
         'user_id',
         'order_id',
         'access_token',
