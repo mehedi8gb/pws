@@ -58,20 +58,21 @@ class FileController extends Controller
         }
 
         // Check if the request contains base64 encoded images
-
         if (count($validatedData['base64_files']) > 0) {
             foreach ($validatedData['base64_files'] as $base64File) {
                 // Assuming FileUploadHelper is adjusted to support base64 files
-                FileUploadHelper::uploadFileFromBase64($base64File, $validatedData['file_type'], $validatedData['user_id']);
+                if (FileUploadHelper::isValidBase64($base64File)) {
+                    FileUploadHelper::uploadFileFromBase64($base64File, $validatedData['file_type'], $validatedData['user_id']);
 
-                $data = File::create([
-                    'user_id' => $validatedData['user_id'],
-                    'order_id' => $validatedData['order_id'],
-                    'file_name' => FileUploadHelper::getFileName(),
-                    'file_path' => FileUploadHelper::getFilePath(),
-                    'file_type' => $validatedData['file_type'],
-                ]);
-                $data->save();
+                    $data = File::create([
+                        'user_id' => $validatedData['user_id'],
+                        'order_id' => $validatedData['order_id'],
+                        'file_name' => FileUploadHelper::getFileName(),
+                        'file_path' => FileUploadHelper::getFilePath(),
+                        'file_type' => $validatedData['file_type'],
+                    ]);
+                    $data->save();
+                }
             }
             return response()->json([
                 'success' => true,

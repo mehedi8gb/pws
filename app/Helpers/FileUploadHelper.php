@@ -66,4 +66,8 @@ class FileUploadHelper
         return self::$fileName;
     }
 
+    public static function isValidBase64(mixed $base64File): false|int
+    {
+        return $base64File != null;
+    }
 }
