@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Models\File;
 use Exception;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -52,6 +53,25 @@ class FileUploadHelper
             Storage::disk($disk)->delete($filePath);
         }
     }
+
+    public static function moveFileToPermanent(File $file, $user_id): string
+    {
+        $disk = 'public';
+        $filePath = $file->file_path;
+
+        // Extract the file name from the file path
+        $fileName = basename($filePath);
+        $oldDirectory = dirname($filePath); // 'artwork/temp'
+
+        // Generate a new unique folder name
+        $newDirectory = $file->file_type . '/' . $user_id; // New directory path
+
+        // Move the file to the new destination
+        Storage::disk($disk)->move($oldDirectory . '/' . $fileName, $newDirectory . '/' . $fileName);
+
+        return $newDirectory . '/' . $fileName;
+    }
+
 
     /**
      * @return string|null
