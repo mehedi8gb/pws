@@ -29,7 +29,6 @@ class FileStoreRequest extends FormRequest
             'files' => 'required_without:base64_files|array',
             'files.*' => 'file|max:102400', // Maximum file size is 100MB
             'base64_files' => 'required_without:files|array', // 'base64_files' should be an array if provided
-            'base64_files.*' => 'string', // Each entry in 'base64_files' should be a string
         ];
     }
 
@@ -46,7 +45,6 @@ class FileStoreRequest extends FormRequest
             'files.*.max' => 'Each file may not be greater than 100MB.',
             'base64_files.required_without' => 'The base64 files field is required when files are not present.',
             'base64_files.array' => 'The base64 files must be an array.',
-            'base64_files.*.string' => 'Each base64 file must be a valid string.',
         ];
     }
 
