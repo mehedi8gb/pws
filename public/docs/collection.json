@@ -1,0 +1,376 @@
+{
+    "variable": [
+        {
+            "id": "baseUrl",
+            "key": "baseUrl",
+            "type": "string",
+            "name": "string",
+            "value": "http:\/\/file-ws.test"
+        }
+    ],
+    "info": {
+        "name": "pws",
+        "_postman_id": "7d2706d9-99af-4222-bf3b-d6d76a5eb9fa",
+        "description": "",
+        "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
+    },
+    "item": [
+        {
+            "name": "File Management",
+            "description": "",
+            "item": [
+                {
+                    "name": "Display a listing of the resource.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/files",
+                            "query": [
+                                {
+                                    "key": "order_id",
+                                    "value": "1",
+                                    "description": "required_without:session_id The ID of the order.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "file_type",
+                                    "value": "invoice",
+                                    "description": "The type of the file.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "session_id",
+                                    "value": "abc123",
+                                    "description": "required_without:order_id The session ID.",
+                                    "disabled": false
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/files?order_id=1&file_type=invoice&session_id=abc123"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"file_type\":\"fugiat\"}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n \"data\": [\n   {\n     \"id\": 1,\n     \"user_id\": 1,\n     \"order_id\": 1,\n     \"file_name\": \"example.pdf\",\n     \"file_path\": \"path\/to\/example.pdf\",\n     \"file_type\": \"invoice\"\n   }\n ]\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Display the specified resource.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/file\/:fileId",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/file\/:fileId",
+                            "variable": [
+                                {
+                                    "id": "fileId",
+                                    "key": "fileId",
+                                    "value": "1",
+                                    "description": "The ID of the file."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n \"data\": {\n   \"id\": 1,\n   \"user_id\": 1,\n   \"order_id\": 1,\n   \"file_name\": \"example.pdf\",\n   \"file_path\": \"path\/to\/example.pdf\",\n   \"file_type\": \"invoice\"\n }\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\n \"message\": \"Not Found\"\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Store a newly created resource in storage.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/files\/upload",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/files\/upload"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"user_id\":1,\"order_id\":1,\"session_id\":\"53fc529b-f438-49cc-8e42-959400cbd1c1\",\"file_type\":\"invoice\",\"files\":[\"dicta\"],\"base64_files\":[\"consequatur\"]}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "{\n \"success\": true,\n \"message\": \"invoice files uploaded successfully\"\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 400,
+                            "body": "{\n \"success\": false,\n \"message\": \"No file uploaded\"\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Move files to permanent storage.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/move\/temp\/to\/permanent",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/move\/temp\/to\/permanent"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"session_id\":\"abc123\",\"order_id\":1,\"user_id\":1,\"file_type\":\"invoice\"}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n \"success\": true,\n \"message\": \"Files moved to permanent storage successfully\"\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 400,
+                            "body": "{\n \"success\": false,\n \"message\": \"Validation error\"\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Temporarily store a newly created resource in storage.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/temp\/files\/upload",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/temp\/files\/upload"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"user_id\":1,\"order_id\":1,\"session_id\":\"abc123\",\"file_type\":\"invoice\",\"files\":[\"autem\"],\"base64_files\":[\"odit\"]}"
+                        },
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "{\n \"success\": true,\n \"message\": \"invoice files uploaded temporarily with session ID\"\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 400,
+                            "body": "{\n \"success\": false,\n \"message\": \"No file uploaded\"\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Download the specified resource.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/download\/:file_id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/download\/:file_id",
+                            "variable": [
+                                {
+                                    "id": "file_id",
+                                    "key": "file_id",
+                                    "value": "1",
+                                    "description": "The ID of the file."
+                                },
+                                {
+                                    "id": "file",
+                                    "key": "file",
+                                    "value": "1",
+                                    "description": "The ID of the file."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "application\/octet-stream The file download.",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\n \"message\": \"Not Found\"\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Remove the specified resource from storage.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/file\/destroy\/:file_id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/file\/destroy\/:file_id",
+                            "variable": [
+                                {
+                                    "id": "file_id",
+                                    "key": "file_id",
+                                    "value": "1",
+                                    "description": "The ID of the file."
+                                },
+                                {
+                                    "id": "file",
+                                    "key": "file",
+                                    "value": "1",
+                                    "description": "The ID of the file."
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 204,
+                            "body": "{\n \"success\": true,\n \"message\": \"File deleted successfully\"\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\n \"message\": \"Not Found\"\n}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "auth": {
+        "type": "noauth"
+    }
+}
