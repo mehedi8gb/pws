@@ -17,7 +17,26 @@ use Symfony\Component\HttpFoundation\Response;
 
 class FileController extends Controller
 {
-    // Display a listing of the resource.
+    /**
+     * Display a listing of the resource.
+     *
+     * @group File Management
+     * @queryParam order_id required_without:session_id The ID of the order. Example: 1
+     * @queryParam file_type required The type of the file. Example: invoice
+     * @queryParam session_id required_without:order_id The session ID. Example: abc123
+     * @response 200 {
+     *  "data": [
+     *    {
+     *      "id": 1,
+     *      "user_id": 1,
+     *      "order_id": 1,
+     *      "file_name": "example.pdf",
+     *      "file_path": "path/to/example.pdf",
+     *      "file_type": "invoice"
+     *    }
+     *  ]
+     * }
+     */
     public function index(Request $request): FileResourceCollection
     {
         $request->validate([
@@ -39,9 +58,23 @@ class FileController extends Controller
         return FileResourceCollection::make($files);
     }
 
-    // Store a newly created resource in storage.
-
     /**
+     * Store a newly created resource in storage.
+     *
+     * @group File Management
+     * @bodyParam user_id int required The ID of the user. Example: 1
+     * @bodyParam order_id int required The ID of the order. Example: 1
+     * @bodyParam file_type string required The type of the file. Example: invoice
+     * @bodyParam files array The files to be uploaded.
+     * @bodyParam base64_files array The base64 encoded files to be uploaded.
+     * @response 201 {
+     *  "success": true,
+     *  "message": "invoice files uploaded successfully"
+     * }
+     * @response 400 {
+     *  "success": false,
+     *  "message": "No file uploaded"
+     * }
      * @throws Exception
      */
     public function store(FileStoreRequest $request): JsonResponse
@@ -66,10 +99,8 @@ class FileController extends Controller
             ], Response::HTTP_CREATED);
         }
 
-        // Check if the request contains base64 encoded images
         if (count($validatedData['base64_files']) > 0) {
             foreach ($validatedData['base64_files'] as $base64File) {
-                // Assuming FileUploadHelper is adjusted to support base64 files
                 if (FileUploadHelper::isValidBase64($base64File)) {
                     FileUploadHelper::uploadFileFromBase64($base64File, $validatedData['file_type'], $validatedData['user_id']);
 
@@ -95,6 +126,23 @@ class FileController extends Controller
         ], Response::HTTP_BAD_REQUEST);
     }
 
+    /**
+     * Temporarily store a newly created resource in storage.
+     *
+     * @group File Management
+     * @bodyParam session_id string required The session ID. Example: abc123
+     * @bodyParam file_type string required The type of the file. Example: invoice
+     * @bodyParam files array The files to be uploaded.
+     * @bodyParam base64_files array The base64 encoded files to be uploaded.
+     * @response 201 {
+     *  "success": true,
+     *  "message": "invoice files uploaded temporarily with session ID"
+     * }
+     * @response 400 {
+     *  "success": false,
+     *  "message": "No file uploaded"
+     * }
+     */
     public function tempStore(FileStoreRequest $request): JsonResponse
     {
         $validatedData = $request->validated();
@@ -140,16 +188,51 @@ class FileController extends Controller
             'success' => false,
             'message' => 'No file uploaded',
         ], Response::HTTP_BAD_REQUEST);
-
     }
 
-    // Display the specified resource.
-    public function show($fileId)
+    /**
+     * Display the specified resource.
+     *
+     * @group File Management
+     * @urlParam fileId int required The ID of the file. Example: 1
+     * @response 200 {
+     *  "data": {
+     *    "id": 1,
+     *    "user_id": 1,
+     *    "order_id": 1,
+     *    "file_name": "example.pdf",
+     *    "file_path": "path/to/example.pdf",
+     *    "file_type": "invoice"
+     *  }
+     * }
+     * @response 404 {
+     *  "message": "Not Found"
+     * }
+     */
+    public function show($fileId): FileResource
     {
         $file = File::find($fileId);
+
         return FileResource::make($file);
     }
 
+    /**
+     * Move files to permanent storage.
+     *
+     * @group File Management
+     * @bodyParam session_id string required The session ID. Example: abc123
+     * @bodyParam order_id int required The ID of the order. Example: 1
+     * @bodyParam user_id int required The ID of the user. Example: 1
+     * @bodyParam file_type string required The type of the file. Example: invoice
+     * @response 200 {
+     *  "success": true,
+     *  "message": "Files moved to permanent storage successfully"
+     * }
+     * @response 400 {
+     *  "success": false,
+     *  "message": "Validation error"
+     * }
+     */
     public function moveToPermanent(Request $request): JsonResponse
     {
         $request->validate([
@@ -176,21 +259,46 @@ class FileController extends Controller
         ], Response::HTTP_OK);
     }
 
-    // Update the specified resource in storage.
-    public function update(FileUpdateRequest $request, File $file)
+    /**
+     * Update the specified resource in storage.
+     *
+     * @group File Management
+     * @urlParam file int required The ID of the file. Example: 1
+     * @bodyParam user_id int The ID of the user. Example: 1
+     * @bodyParam order_id int The ID of the order. Example: 1
+     * @bodyParam file_type string The type of the file. Example: invoice
+     * @response 200 {
+     *  "data": {
+     *    "id": 1,
+     *    "user_id": 1,
+     *    "order_id": 1,
+     *    "file_name": "example.pdf",
+     *    "file_path": "path/to/example.pdf",
+     *    "file_type": "invoice"
+     *  }
+     * }
+     * @response 400 {
+     *  "message": "Validation error"
+     * }
+     */
+    public function update(FileUpdateRequest $request, File $file): FileResource
     {
         $file->update($request->validated());
         return FileResource::make($file);
     }
 
-    // Download the specified resource.
+    /**
+     * Download the specified resource.
+     *
+     * @group File Management
+     * @urlParam file int required The ID of the file. Example: 1
+     * @response 200 application/octet-stream The file download.
+     * @response 404 {
+     *  "message": "Not Found"
+     * }
+     */
     public function download(File $file, Request $request)
     {
-        // $accessToken = $request->header('Authorization');
-
-        // if (!$this->isValidAccessToken($accessToken)) {
-        //     abort(401, 'Unauthorized');
-        // }
         $filePath = storage_path('app/public/' . $file->file_path);
         if (file_exists($filePath)) {
             return response()->download($filePath);
@@ -199,8 +307,20 @@ class FileController extends Controller
         abort(404);
     }
 
-    // Remove the specified resource from storage.
-    public function destroy(File $file)
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @group File Management
+     * @urlParam file int required The ID of the file. Example: 1
+     * @response 204 {
+     *  "success": true,
+     *  "message": "File deleted successfully"
+     * }
+     * @response 404 {
+     *  "message": "Not Found"
+     * }
+     */
+    public function destroy(File $file): JsonResponse
     {
         $file->delete();
         FileUploadHelper::deleteFile($file->file_path);
@@ -211,11 +331,15 @@ class FileController extends Controller
         ], Response::HTTP_NO_CONTENT);
     }
 
-    // Validate the access token
+    /**
+     * Validate the access token.
+     *
+     * @group File Management
+     * @param string $accessToken The access token to validate.
+     * @return bool
+     */
     private function isValidAccessToken($accessToken)
     {
-        // Implement your logic to validate the access token
-        // For example, check against your database or another source
         return $accessToken === 'YOUR_SECRET_ACCESS_TOKEN';
     }
 }

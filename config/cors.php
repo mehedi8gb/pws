@@ -21,9 +21,11 @@ return [
 
     'allowed_origins' => [
         'https://new-backoffice.test',
+        'http://new-backoffice.test',
         'https://staging.backoffice2.daynightprint.co.uk',
         'https://backoffice2.daynightprint.co.uk',
-        'https://dnp-order-flow.netlify.app'
+        'https://dnp-order-flow.netlify.app',
+		'http://192.168.0.6:8080'
     ],
 
     'allowed_origins_patterns' => [],

@@ -47,4 +47,34 @@ class FileUpdateRequest extends FormRequest
             //
         ]);
     }
+
+    public function bodyParameters(): array
+    {
+        return [
+            'user_id' => [
+                'description' => 'The ID of the user.',
+                'example' => 1,
+            ],
+            'order_id' => [
+                'description' => 'The ID of the order.',
+                'example' => 1,
+            ],
+            'session_id' => [
+                'description' => 'The session ID.',
+                'example' => '53fc529b-f438-49cc-8e42-959400cbd1c1',
+            ],
+            'file_type' => [
+                'description' => 'The type of the file.',
+                'example' => 'invoice',
+            ],
+            'files' => [
+                'description' => 'The files to be uploaded.',
+                'example' => [],
+            ],
+            'base64_files' => [
+                'description' => 'The base64 encoded files to be uploaded.',
+                'example' => [],
+            ],
+        ];
+    }
 }
