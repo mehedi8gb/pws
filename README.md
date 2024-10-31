@@ -16,7 +16,7 @@ This project is a file management web service built with PHP and Laravel. It pro
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/mehedi8gb/file-ws.git
+    git clone https://github.com/mehedi8gb/pws.git
     cd file-ws
     ```
 
