@@ -1,0 +1,653 @@
+name: 'File Management'
+description: ''
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: api/files
+    metadata:
+      groupName: 'File Management'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Display a listing of the resource.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      order_id:
+        name: order_id
+        description: 'required_without:session_id The ID of the order.'
+        required: false
+        example: '1'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      file_type:
+        name: file_type
+        description: 'The type of the file.'
+        required: true
+        example: invoice
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      session_id:
+        name: session_id
+        description: 'required_without:order_id The session ID.'
+        required: false
+        example: abc123
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanQueryParameters:
+      order_id: '1'
+      file_type: invoice
+      session_id: abc123
+    bodyParameters:
+      order_id:
+        name: order_id
+        description: 'This field is required when <code>session_id</code> is not present.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      file_type:
+        name: file_type
+        description: ''
+        required: true
+        example: voluptatem
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      session_id:
+        name: session_id
+        description: 'This field is required when <code>order_id</code> is not present.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      file_type: voluptatem
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+           "data": [
+             {
+               "id": 1,
+               "user_id": 1,
+               "order_id": 1,
+               "file_name": "example.pdf",
+               "file_path": "path/to/example.pdf",
+               "file_type": "invoice"
+             }
+           ]
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/file/{fileId}'
+    metadata:
+      groupName: 'File Management'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Display the specified resource.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      fileId:
+        name: fileId
+        description: 'The ID of the file.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      fileId: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+           "data": {
+             "id": 1,
+             "user_id": 1,
+             "order_id": 1,
+             "file_name": "example.pdf",
+             "file_path": "path/to/example.pdf",
+             "file_type": "invoice"
+           }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+           "message": "Not Found"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/files/upload
+    metadata:
+      groupName: 'File Management'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Store a newly created resource in storage.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      user_id:
+        name: user_id
+        description: 'The ID of the user.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      order_id:
+        name: order_id
+        description: 'The ID of the order.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      session_id:
+        name: session_id
+        description: 'The session ID.'
+        required: false
+        example: 53fc529b-f438-49cc-8e42-959400cbd1c1
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      file_type:
+        name: file_type
+        description: 'The type of the file.'
+        required: true
+        example: invoice
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      files:
+        name: files
+        description: 'The files to be uploaded.'
+        required: false
+        example:
+          - non
+        type: 'string[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      base64_files:
+        name: base64_files
+        description: 'The base64 encoded files to be uploaded.'
+        required: false
+        example:
+          - omnis
+        type: 'string[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      user_id: 1
+      order_id: 1
+      session_id: 53fc529b-f438-49cc-8e42-959400cbd1c1
+      file_type: invoice
+      files:
+        - non
+      base64_files:
+        - omnis
+    fileParameters: []
+    responses:
+      -
+        status: 201
+        content: |-
+          {
+           "success": true,
+           "message": "invoice files uploaded successfully"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 400
+        content: |-
+          {
+           "success": false,
+           "message": "No file uploaded"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/move/temp/to/permanent
+    metadata:
+      groupName: 'File Management'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Move files to permanent storage.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      session_id:
+        name: session_id
+        description: 'The session ID.'
+        required: true
+        example: abc123
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      order_id:
+        name: order_id
+        description: 'The ID of the order.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      user_id:
+        name: user_id
+        description: 'The ID of the user.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      file_type:
+        name: file_type
+        description: 'The type of the file.'
+        required: true
+        example: invoice
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      session_id: abc123
+      order_id: 1
+      user_id: 1
+      file_type: invoice
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+           "success": true,
+           "message": "Files moved to permanent storage successfully"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 400
+        content: |-
+          {
+           "success": false,
+           "message": "Validation error"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/temp/files/upload
+    metadata:
+      groupName: 'File Management'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Temporarily store a newly created resource in storage.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      user_id:
+        name: user_id
+        description: 'The ID of the user. This field is required when <code>session_id</code> is not present.'
+        required: false
+        example: 1
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      order_id:
+        name: order_id
+        description: 'The ID of the order. This field is required when <code>session_id</code> is not present.'
+        required: false
+        example: 1
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      session_id:
+        name: session_id
+        description: 'The session ID.'
+        required: true
+        example: abc123
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        custom: []
+      file_type:
+        name: file_type
+        description: 'The type of the file.'
+        required: true
+        example: invoice
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      files:
+        name: files
+        description: 'The files to be uploaded.'
+        required: false
+        example:
+          - fugit
+        type: 'string[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      base64_files:
+        name: base64_files
+        description: 'The base64 encoded files to be uploaded.'
+        required: false
+        example:
+          - velit
+        type: 'string[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      user_id: 1
+      order_id: 1
+      session_id: abc123
+      file_type: invoice
+      files:
+        - fugit
+      base64_files:
+        - velit
+    fileParameters: []
+    responses:
+      -
+        status: 201
+        content: |-
+          {
+           "success": true,
+           "message": "invoice files uploaded temporarily with session ID"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 400
+        content: |-
+          {
+           "success": false,
+           "message": "No file uploaded"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/download/{file_id}'
+    metadata:
+      groupName: 'File Management'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Download the specified resource.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      file_id:
+        name: file_id
+        description: 'The ID of the file.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      file:
+        name: file
+        description: 'The ID of the file.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      file_id: 1
+      file: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: 'application/octet-stream The file download.'
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+           "message": "Not Found"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/file/destroy/{file_id}'
+    metadata:
+      groupName: 'File Management'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Remove the specified resource from storage.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      file_id:
+        name: file_id
+        description: 'The ID of the file.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      file:
+        name: file
+        description: 'The ID of the file.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      file_id: 1
+      file: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 204
+        content: |-
+          {
+           "success": true,
+           "message": "File deleted successfully"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+           "message": "Not Found"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []

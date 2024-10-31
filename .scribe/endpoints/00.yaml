@@ -1,16 +1,16 @@
-name: 'File Management'
+name: Endpoints
 description: ''
 endpoints:
   -
     httpMethods:
       - GET
-    uri: api/files
+    uri: api/documentation
     metadata:
-      groupName: 'File Management'
+      groupName: Endpoints
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Display a listing of the resource.'
+      title: 'Display Swagger API page.'
       description: ''
       authenticated: false
       custom: []
@@ -19,93 +19,93 @@ endpoints:
       Accept: application/json
     urlParameters: []
     cleanUrlParameters: []
-    queryParameters:
-      order_id:
-        name: order_id
-        description: 'required_without:session_id The ID of the order.'
-        required: false
-        example: '1'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      file_type:
-        name: file_type
-        description: 'The type of the file.'
-        required: true
-        example: invoice
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      session_id:
-        name: session_id
-        description: 'required_without:order_id The session ID.'
-        required: false
-        example: abc123
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-    cleanQueryParameters:
-      order_id: '1'
-      file_type: invoice
-      session_id: abc123
-    bodyParameters:
-      order_id:
-        name: order_id
-        description: 'This field is required when <code>session_id</code> is not present.'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      file_type:
-        name: file_type
-        description: ''
-        required: true
-        example: fugiat
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      session_id:
-        name: session_id
-        description: 'This field is required when <code>order_id</code> is not present.'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanBodyParameters:
-      file_type: fugiat
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
     fileParameters: []
     responses:
       -
         status: 200
-        content: |-
-          {
-           "data": [
-             {
-               "id": 1,
-               "user_id": 1,
-               "order_id": 1,
-               "file_name": "example.pdf",
-               "file_path": "path/to/example.pdf",
-               "file_type": "invoice"
-             }
-           ]
-          }
-        headers: []
-        description: ''
+        content: |
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <meta charset="UTF-8">
+              <title>L5 Swagger UI</title>
+              <link rel="stylesheet" type="text/css" href="http://file-ws.test/docs/asset/swagger-ui.css?v=fd5df98cfc0e58ed507042cd86a1f1df">
+              <link rel="icon" type="image/png" href="http://file-ws.test/docs/asset/favicon-32x32.png?v=40d4f2c38d1cd854ad463f16373cbcb6" sizes="32x32"/>
+              <link rel="icon" type="image/png" href="http://file-ws.test/docs/asset/favicon-16x16.png?v=f0ae831196d55d8f4115b6c5e8ec5384" sizes="16x16"/>
+              <style>
+              html
+              {
+                  box-sizing: border-box;
+                  overflow: -moz-scrollbars-vertical;
+                  overflow-y: scroll;
+              }
+              *,
+              *:before,
+              *:after
+              {
+                  box-sizing: inherit;
+              }
+
+              body {
+                margin:0;
+                background: #fafafa;
+              }
+              </style>
+              </head>
+
+          <body >
+          <div id="swagger-ui"></div>
+
+          <script src="http://file-ws.test/docs/asset/swagger-ui-bundle.js?v=bccc97f77bdb8edc590ae3abdf83b9a7"></script>
+          <script src="http://file-ws.test/docs/asset/swagger-ui-standalone-preset.js?v=861c3618a16aefc88e19a052836718e5"></script>
+          <script>
+              window.onload = function() {
+                  // Build a system
+                  const ui = SwaggerUIBundle({
+                      dom_id: '#swagger-ui',
+                      url: "http://file-ws.test/docs/api-docs.json",
+                      operationsSorter: null,
+                      configUrl: null,
+                      validatorUrl: null,
+                      oauth2RedirectUrl: "http://file-ws.test/api/oauth2-callback",
+
+                      requestInterceptor: function(request) {
+                          request.headers['X-CSRF-TOKEN'] = '';
+                          return request;
+                      },
+
+                      presets: [
+                          SwaggerUIBundle.presets.apis,
+                          SwaggerUIStandalonePreset
+                      ],
+
+                      plugins: [
+                          SwaggerUIBundle.plugins.DownloadUrl
+                      ],
+
+                      layout: "StandaloneLayout",
+                      docExpansion : "none",
+                      deepLinking: true,
+                      filter: true,
+                      persistAuthorization: "false",
+
+                  })
+
+                  window.ui = ui
+
+                      }
+          </script>
+          </body>
+          </html>
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          vary: Origin
+        description: null
         custom: []
     responseFields: []
     auth: []
@@ -116,79 +116,13 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/file/{fileId}'
+    uri: api/oauth2-callback
     metadata:
-      groupName: 'File Management'
+      groupName: Endpoints
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Display the specified resource.'
-      description: ''
-      authenticated: false
-      custom: []
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      fileId:
-        name: fileId
-        description: 'The ID of the file.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      fileId: 1
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 200
-        content: |-
-          {
-           "data": {
-             "id": 1,
-             "user_id": 1,
-             "order_id": 1,
-             "file_name": "example.pdf",
-             "file_path": "path/to/example.pdf",
-             "file_type": "invoice"
-           }
-          }
-        headers: []
-        description: ''
-        custom: []
-      -
-        status: 404
-        content: |-
-          {
-           "message": "Not Found"
-          }
-        headers: []
-        description: ''
-        custom: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - POST
-    uri: api/files/upload
-    metadata:
-      groupName: 'File Management'
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Store a newly created resource in storage.'
+      title: 'Display Oauth2 callback pages.'
       description: ''
       authenticated: false
       custom: []
@@ -199,451 +133,97 @@ endpoints:
     cleanUrlParameters: []
     queryParameters: []
     cleanQueryParameters: []
-    bodyParameters:
-      user_id:
-        name: user_id
-        description: 'The ID of the user.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      order_id:
-        name: order_id
-        description: 'The ID of the order.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      session_id:
-        name: session_id
-        description: 'The session ID.'
-        required: false
-        example: 53fc529b-f438-49cc-8e42-959400cbd1c1
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      file_type:
-        name: file_type
-        description: 'The type of the file.'
-        required: true
-        example: invoice
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      files:
-        name: files
-        description: 'The files to be uploaded.'
-        required: false
-        example:
-          - dicta
-        type: 'string[]'
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      base64_files:
-        name: base64_files
-        description: 'The base64 encoded files to be uploaded.'
-        required: false
-        example:
-          - consequatur
-        type: 'string[]'
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanBodyParameters:
-      user_id: 1
-      order_id: 1
-      session_id: 53fc529b-f438-49cc-8e42-959400cbd1c1
-      file_type: invoice
-      files:
-        - dicta
-      base64_files:
-        - consequatur
-    fileParameters: []
-    responses:
-      -
-        status: 201
-        content: |-
-          {
-           "success": true,
-           "message": "invoice files uploaded successfully"
-          }
-        headers: []
-        description: ''
-        custom: []
-      -
-        status: 400
-        content: |-
-          {
-           "success": false,
-           "message": "No file uploaded"
-          }
-        headers: []
-        description: ''
-        custom: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - POST
-    uri: api/move/temp/to/permanent
-    metadata:
-      groupName: 'File Management'
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Move files to permanent storage.'
-      description: ''
-      authenticated: false
-      custom: []
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      session_id:
-        name: session_id
-        description: 'The session ID.'
-        required: true
-        example: abc123
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      order_id:
-        name: order_id
-        description: 'The ID of the order.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      user_id:
-        name: user_id
-        description: 'The ID of the user.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      file_type:
-        name: file_type
-        description: 'The type of the file.'
-        required: true
-        example: invoice
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-    cleanBodyParameters:
-      session_id: abc123
-      order_id: 1
-      user_id: 1
-      file_type: invoice
-    fileParameters: []
-    responses:
-      -
-        status: 200
-        content: |-
-          {
-           "success": true,
-           "message": "Files moved to permanent storage successfully"
-          }
-        headers: []
-        description: ''
-        custom: []
-      -
-        status: 400
-        content: |-
-          {
-           "success": false,
-           "message": "Validation error"
-          }
-        headers: []
-        description: ''
-        custom: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - POST
-    uri: api/temp/files/upload
-    metadata:
-      groupName: 'File Management'
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Temporarily store a newly created resource in storage.'
-      description: ''
-      authenticated: false
-      custom: []
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      user_id:
-        name: user_id
-        description: 'The ID of the user. This field is required when <code>session_id</code> is not present.'
-        required: false
-        example: 1
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      order_id:
-        name: order_id
-        description: 'The ID of the order. This field is required when <code>session_id</code> is not present.'
-        required: false
-        example: 1
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      session_id:
-        name: session_id
-        description: 'The session ID.'
-        required: true
-        example: abc123
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: true
-        custom: []
-      file_type:
-        name: file_type
-        description: 'The type of the file.'
-        required: true
-        example: invoice
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      files:
-        name: files
-        description: 'The files to be uploaded.'
-        required: false
-        example:
-          - autem
-        type: 'string[]'
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      base64_files:
-        name: base64_files
-        description: 'The base64 encoded files to be uploaded.'
-        required: false
-        example:
-          - odit
-        type: 'string[]'
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanBodyParameters:
-      user_id: 1
-      order_id: 1
-      session_id: abc123
-      file_type: invoice
-      files:
-        - autem
-      base64_files:
-        - odit
-    fileParameters: []
-    responses:
-      -
-        status: 201
-        content: |-
-          {
-           "success": true,
-           "message": "invoice files uploaded temporarily with session ID"
-          }
-        headers: []
-        description: ''
-        custom: []
-      -
-        status: 400
-        content: |-
-          {
-           "success": false,
-           "message": "No file uploaded"
-          }
-        headers: []
-        description: ''
-        custom: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: 'api/download/{file_id}'
-    metadata:
-      groupName: 'File Management'
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Download the specified resource.'
-      description: ''
-      authenticated: false
-      custom: []
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      file_id:
-        name: file_id
-        description: 'The ID of the file.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      file:
-        name: file
-        description: 'The ID of the file.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      file_id: 1
-      file: 1
-    queryParameters: []
-    cleanQueryParameters: []
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
     responses:
       -
         status: 200
-        content: 'application/octet-stream The file download.'
-        headers: []
-        description: ''
-        custom: []
-      -
-        status: 404
-        content: |-
-          {
-           "message": "Not Found"
-          }
-        headers: []
-        description: ''
-        custom: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - POST
-    uri: 'api/file/destroy/{file_id}'
-    metadata:
-      groupName: 'File Management'
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Remove the specified resource from storage.'
-      description: ''
-      authenticated: false
-      custom: []
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      file_id:
-        name: file_id
-        description: 'The ID of the file.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      file:
-        name: file
-        description: 'The ID of the file.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      file_id: 1
-      file: 1
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 204
-        content: |-
-          {
-           "success": true,
-           "message": "File deleted successfully"
-          }
-        headers: []
-        description: ''
-        custom: []
-      -
-        status: 404
-        content: |-
-          {
-           "message": "Not Found"
-          }
-        headers: []
-        description: ''
+        content: |
+          <!doctype html>
+          <html lang="en-US">
+          <head>
+              <title>Swagger UI: OAuth2 Redirect</title>
+          </head>
+          <body>
+          <script>
+              'use strict';
+              function run () {
+                  var oauth2 = window.opener.swaggerUIRedirectOauth2;
+                  var sentState = oauth2.state;
+                  var redirectUrl = oauth2.redirectUrl;
+                  var isValid, qp, arr;
+
+                  if (/code|token|error/.test(window.location.hash)) {
+                      qp = window.location.hash.substring(1).replace('?', '&');
+                  } else {
+                      qp = location.search.substring(1);
+                  }
+
+                  arr = qp.split("&");
+                  arr.forEach(function (v,i,_arr) { _arr[i] = '"' + v.replace('=', '":"') + '"';});
+                  qp = qp ? JSON.parse('{' + arr.join() + '}',
+                          function (key, value) {
+                              return key === "" ? value : decodeURIComponent(value);
+                          }
+                  ) : {};
+
+                  isValid = qp.state === sentState;
+
+                  if ((
+                    oauth2.auth.schema.get("flow") === "accessCode" ||
+                    oauth2.auth.schema.get("flow") === "authorizationCode" ||
+                    oauth2.auth.schema.get("flow") === "authorization_code"
+                  ) && !oauth2.auth.code) {
+                      if (!isValid) {
+                          oauth2.errCb({
+                              authId: oauth2.auth.name,
+                              source: "auth",
+                              level: "warning",
+                              message: "Authorization may be unsafe, passed state was changed in server. The passed state wasn't returned from auth server."
+                          });
+                      }
+
+                      if (qp.code) {
+                          delete oauth2.state;
+                          oauth2.auth.code = qp.code;
+                          oauth2.callback({auth: oauth2.auth, redirectUrl: redirectUrl});
+                      } else {
+                          let oauthErrorMsg;
+                          if (qp.error) {
+                              oauthErrorMsg = "["+qp.error+"]: " +
+                                  (qp.error_description ? qp.error_description+ ". " : "no accessCode received from the server. ") +
+                                  (qp.error_uri ? "More info: "+qp.error_uri : "");
+                          }
+
+                          oauth2.errCb({
+                              authId: oauth2.auth.name,
+                              source: "auth",
+                              level: "error",
+                              message: oauthErrorMsg || "[Authorization failed]: no accessCode received from the server."
+                          });
+                      }
+                  } else {
+                      oauth2.callback({auth: oauth2.auth, token: qp, isValid: isValid, redirectUrl: redirectUrl});
+                  }
+                  window.close();
+              }
+
+              if (document.readyState !== 'loading') {
+                  run();
+              } else {
+                  document.addEventListener('DOMContentLoaded', function () {
+                      run();
+                  });
+              }
+          </script>
+          </body>
+          </html>
+        headers:
+          content-type: 'text/html; charset=UTF-8'
+          cache-control: 'no-cache, private'
+          vary: Origin
+        description: null
         custom: []
     responseFields: []
     auth: []
