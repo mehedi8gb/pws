@@ -8,7 +8,7 @@ This project is a file management web service built with PHP and Laravel. It pro
 
 - PHP 7.4 or higher
 - Composer
-- Laravel 8.x
+- Laravel 10.x
 - MySQL
 - Docker
 
