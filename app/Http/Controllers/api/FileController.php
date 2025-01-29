@@ -14,6 +14,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
+use function PHPUnit\Framework\isEmpty;
 
 class FileController extends Controller
 {
@@ -40,19 +41,22 @@ class FileController extends Controller
     public function index(Request $request): FileResourceCollection
     {
         $request->validate([
-            'order_id' => 'required_without:session_id',
-            'file_type' => 'required',
-            'session_id' => 'required_without:order_id'
+//            'order_id' => 'required_without:session_id',
+//            'session_id' => 'required_without:order_id',
+            'file_type' => 'nullable',
+            'order_id' => 'nullable',
+            'limit' => 'nullable|integer',
         ]);
         $files = [];
 
         if ($request->has('order_id')) {
-            $files = File::where('order_id', $request->order_id)
-                ->where('file_type', $request->file_type)->get();
+            $files = File::where('order_id', $request->order_id)->get();
         }
         if ($request->has('session_id')) {
-            $files = File::where('session_id', $request->session_id)
-                ->where('file_type', $request->file_type)->get();
+            $files = File::where('session_id', $request->session_id)->get();
+        }
+        if (isEmpty($files)) {
+            return FileResourceCollection::make(File::limit($request->limit ?? 10)->get());
         }
 
         return FileResourceCollection::make($files);
@@ -79,44 +83,45 @@ class FileController extends Controller
      */
     public function store(FileStoreRequest $request): JsonResponse
     {
+        $data = [];
         $validatedData = $request->validated();
         if ($request->hasFile('files')) {
             foreach ($request->file('files') as $file) {
-                FileUploadHelper::uploadFile($file, $validatedData['file_type'], $validatedData['user_id']);
+                FileUploadHelper::uploadFile($file, $request->file_type, $request->user_id);
 
                 $data = File::create([
-                    'user_id' => $validatedData['user_id'],
-                    'order_id' => $validatedData['order_id'],
+                    'user_id' => $request->user_id,
+                    'order_id' => $request->order_id,
                     'file_name' => FileUploadHelper::getFileName(),
                     'file_path' => FileUploadHelper::getFilePath(),
-                    'file_type' => $validatedData['file_type'],
+                    'file_type' => $request->file_type,
                 ]);
-                $data->save();
             }
             return response()->json([
                 'success' => true,
-                'message' => $validatedData['file_type'] . ' files uploaded successfully',
+                'message' => $request->file_type . ' files uploaded successfully',
+                'data' => FileResource::make($data),
             ], Response::HTTP_CREATED);
         }
 
         if (count($validatedData['base64_files']) > 0) {
             foreach ($validatedData['base64_files'] as $base64File) {
                 if (FileUploadHelper::isValidBase64($base64File)) {
-                    FileUploadHelper::uploadFileFromBase64($base64File, $validatedData['file_type'], $validatedData['user_id']);
+                    FileUploadHelper::uploadFileFromBase64($base64File, $request->file_type, $request->user_id);
 
                     $data = File::create([
-                        'user_id' => $validatedData['user_id'],
-                        'order_id' => $validatedData['order_id'],
+                        'user_id' => $request->user_id,
+                        'order_id' => $request->order_id,
                         'file_name' => FileUploadHelper::getFileName(),
                         'file_path' => FileUploadHelper::getFilePath(),
-                        'file_type' => $validatedData['file_type'],
+                        'file_type' => $request->file_type,
                     ]);
                     $data->save();
                 }
             }
             return response()->json([
                 'success' => true,
-                'message' => $validatedData['file_type'] . ' base64 files uploaded successfully',
+                'message' => $request->file_type . ' base64 files uploaded successfully',
             ], Response::HTTP_CREATED);
         }
 
@@ -150,37 +155,37 @@ class FileController extends Controller
 
         if ($request->hasFile('files')) {
             foreach ($request->file('files') as $file) {
-                FileUploadHelper::uploadFile($file, $validatedData['file_type'], 'temp');
+                FileUploadHelper::uploadFile($file, $request->file_type, 'temp');
 
                 $data = File::create([
                     'session_id' => $sessionId,
                     'file_name' => FileUploadHelper::getFileName(),
                     'file_path' => FileUploadHelper::getFilePath(),
-                    'file_type' => $validatedData['file_type'],
+                    'file_type' => $request->file_type,
                 ]);
                 $data->save();
             }
             return response()->json([
                 'success' => true,
-                'message' => $validatedData['file_type'] . ' files uploaded temporarily with session ID',
+                'message' => $request->file_type . ' files uploaded temporarily with session ID',
             ], Response::HTTP_CREATED);
         }
 
         if (count($validatedData['base64_files']) > 0) {
             foreach ($validatedData['base64_files'] as $base64File) {
-                FileUploadHelper::uploadFileFromBase64($base64File, $validatedData['file_type'], 'temp');
+                FileUploadHelper::uploadFileFromBase64($base64File, $request->file_type, 'temp');
 
                 $data = File::create([
                     'session_id' => $sessionId,
                     'file_name' => FileUploadHelper::getFileName(),
                     'file_path' => FileUploadHelper::getFilePath(),
-                    'file_type' => $validatedData['file_type'],
+                    'file_type' => $request->file_type,
                 ]);
                 $data->save();
             }
             return response()->json([
                 'success' => true,
-                'message' => $validatedData['file_type'] . ' base64 files uploaded temporarily with session ID',
+                'message' => $request->file_type . ' base64 files uploaded temporarily with session ID',
             ], Response::HTTP_CREATED);
         }
 

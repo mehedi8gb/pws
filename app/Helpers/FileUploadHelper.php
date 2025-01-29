@@ -15,13 +15,16 @@ class FileUploadHelper
 
     /**
      * @param UploadedFile $file
-     * @param string $destination
-     * @param string $userId
+     * @param string|null $destination
+     * @param string|null $userId
      * @param string $disk
      * @return void
      */
-    public static function uploadFile(UploadedFile $file, string $destination, string $userId, string $disk = 'public'): void
+    public static function uploadFile(UploadedFile $file, string|null $destination = 'files', string|null $userId = 'users', string $disk = 'public'): void
     {
+        if (!$destination) $destination = 'files';
+        if (!$userId) $userId = 'users';
+
         self::$fileName = $file->getClientOriginalName();
         $filenameUUID = Str::uuid()->toString() . '.' . self::$fileName;
         self::$filePath = $file->storeAs($destination . '/' . $userId, $filenameUUID, $disk);
@@ -32,6 +35,9 @@ class FileUploadHelper
      */
     public static function uploadFileFromBase64(string $base64File, string $destination, string $userId, string $fileExtension = 'png', string $disk = 'public'): void
     {
+        if (!$destination) $destination = 'files';
+        if (!$userId) $userId = 'users';
+
         // Decode base64 file
         $fileData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $base64File));
 

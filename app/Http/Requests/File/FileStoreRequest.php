@@ -20,12 +20,14 @@ class FileStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => 'required_without:session_id',
-            'order_id' => 'required_without:session_id',
-
+//            'user_id' => 'required_without:session_id',
+//            'order_id' => 'required_without:session_id',
+            'user_id' => 'nullable', // 'user_id' can be nullable and a string
+            'order_id' => 'nullable', // 'order_id' can be nullable and a string
             'session_id' => 'nullable', // 'session_id' can be nullable and a string
 
-            'file_type' => 'required|in:invoice,customer,artwork,item_file', // Define allowed file types
+//            'file_type' => 'required|in:invoice,customer,artwork,item_file', // Define allowed file types
+            'file_type' => 'nullable', // 'file_type' is required
             'files' => 'required_without:base64_files|array',
             'files.*' => 'file|max:102400', // Maximum file size is 100MB
             'base64_files' => 'required_without:files|array', // 'base64_files' should be an array if provided
@@ -35,10 +37,10 @@ class FileStoreRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'user_id.required_without' => 'The user ID field is required when session ID is not present.',
-            'order_id.required_without' => 'The order ID field is required when session ID is not present.',
-            'file_type.required' => 'The file type field is required.',
-            'file_type.in' => 'The selected file type is invalid.',
+//            'user_id.required_without' => 'The user ID field is required when session ID is not present.',
+//            'order_id.required_without' => 'The order ID field is required when session ID is not present.',
+//            'file_type.required' => 'The file type field is required.',
+//            'file_type.in' => 'The selected file type is invalid.',
             'files.required_without' => 'The files field is required when base64 files are not present.',
             'files.array' => 'The files must be an array.',
             'files.*.file' => 'Each file must be a valid file.',

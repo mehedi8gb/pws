@@ -16,8 +16,6 @@ class FileResource extends JsonResource
             'file_name' => $this->file_name,
             'file_path' => $this->file_path,
             'file_url' => route('file.download', $this->id),
-            'editMode' => false,
-            'showDeleteWarning' => false,
             'created_at' => Carbon::parse($this->created_at)->format('d M Y'),
         ];
     }

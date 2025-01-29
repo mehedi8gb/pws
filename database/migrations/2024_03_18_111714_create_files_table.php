@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('access_token')->default('YOUR_SECRET_ACCESS_TOKEN');
             $table->binary('file_name');
             $table->binary('file_path');
-            $table->string('file_type');
+            $table->string('file_type')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
