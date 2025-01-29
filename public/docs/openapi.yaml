@@ -131,29 +131,27 @@ paths:
       tags:
         - 'File Management'
       requestBody:
-        required: true
+        required: false
         content:
           application/json:
             schema:
               type: object
               properties:
-                order_id:
-                  type: string
-                  description: 'This field is required when <code>session_id</code> is not present.'
-                  example: null
-                  nullable: false
                 file_type:
                   type: string
-                  description: ''
-                  example: voluptatem
-                  nullable: false
-                session_id:
-                  type: string
-                  description: 'This field is required when <code>order_id</code> is not present.'
+                  description: "'order_id' => 'required_without:session_id',\n'session_id' => 'required_without:order_id',."
                   example: null
-                  nullable: false
-              required:
-                - file_type
+                  nullable: true
+                order_id:
+                  type: string
+                  description: ''
+                  example: null
+                  nullable: true
+                limit:
+                  type: integer
+                  description: ''
+                  example: 5
+                  nullable: true
       security: []
   '/api/file/{fileId}':
     get:
@@ -274,12 +272,12 @@ paths:
                   type: integer
                   description: 'The ID of the user.'
                   example: 1
-                  nullable: false
+                  nullable: true
                 order_id:
                   type: integer
                   description: 'The ID of the order.'
                   example: 1
-                  nullable: false
+                  nullable: true
                 session_id:
                   type: string
                   description: 'The session ID.'
@@ -289,19 +287,19 @@ paths:
                   type: string
                   description: 'The type of the file.'
                   example: invoice
-                  nullable: false
+                  nullable: true
                 files:
                   type: array
                   description: 'The files to be uploaded.'
                   example:
-                    - non
+                    - quo
                   items:
                     type: string
                 base64_files:
                   type: array
                   description: 'The base64 encoded files to be uploaded.'
                   example:
-                    - omnis
+                    - ad
                   items:
                     type: string
               required:
@@ -433,14 +431,14 @@ paths:
               properties:
                 user_id:
                   type: string
-                  description: 'The ID of the user. This field is required when <code>session_id</code> is not present.'
+                  description: 'The ID of the user.'
                   example: 1
-                  nullable: false
+                  nullable: true
                 order_id:
                   type: string
-                  description: 'The ID of the order. This field is required when <code>session_id</code> is not present.'
+                  description: 'The ID of the order.'
                   example: 1
-                  nullable: false
+                  nullable: true
                 session_id:
                   type: string
                   description: 'The session ID.'
@@ -450,19 +448,19 @@ paths:
                   type: string
                   description: 'The type of the file.'
                   example: invoice
-                  nullable: false
+                  nullable: true
                 files:
                   type: array
                   description: 'The files to be uploaded.'
                   example:
-                    - fugit
+                    - pariatur
                   items:
                     type: string
                 base64_files:
                   type: array
                   description: 'The base64 encoded files to be uploaded.'
                   example:
-                    - velit
+                    - qui
                   items:
                     type: string
               required:
